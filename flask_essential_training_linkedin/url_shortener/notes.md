@@ -42,6 +42,10 @@ Then, in the template file ()`home.html` in this case), we can use the value of 
 ```
 
 ### Requests
+
+By default, `flask` treats all requests as `GET` requests.
+
+First, we need to import the `request` submodule:
 ```shell
 from flask import request
 ```
@@ -53,6 +57,12 @@ def your_url():
 ```
 
 `http://localhost:5000/your-url?code=hello`
+
+```shell
+@app.route('/your-url', methods=['POST'])
+def your_url():
+    return render_template('your_url.html', code=request.form['code'])
+```
 
 ## HTML
 
