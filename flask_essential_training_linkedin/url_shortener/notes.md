@@ -29,6 +29,8 @@ from flask import render_template
 ```
 By default, `flask` looks for templates inside the `templates` directory but this behavior can be changed XXX.
 
+## Data movement
+
 ### Parameters
 We can pass parameters to the template engine by including them when calling `render_template`:
 ```shell
@@ -38,6 +40,26 @@ Then, in the template file ()`home.html` in this case), we can use the value of 
 ```shell
 <h2>{{name}}</h2>
 ```
+
+### Requests
+```shell
+from flask import request
+```
+
+```shell
+@app.route('/your-url', methods=['GET'])
+def your_url():
+    return render_template('your_url.html', code=request.args['code'])
+```
+
+`http://localhost:5000/your-url?code=hello`
+
+## HTML
+
+### Forms
+
+#### \<input\>
+The `name` attribute of an `<input>` field is used to reference elements in a JavaScript, or to reference form data after a form is submitted.
 
 ## Tips
 
