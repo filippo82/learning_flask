@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import json
 import os.path
+from werkzeug.utils import secure_filename
 
 # Applications that will serve the website
 app = Flask(__name__)
+app.secret_key = 'gasgdhsdfgahfsd823bdjs7'
 
 # Homepage
 @app.route('/')
@@ -24,9 +26,16 @@ def your_url():
                 urls = json.load(url_file)
         # Check if the code has already been used
         if request.form['code'] in urls.keys():
+            flash('That short name has already been taken. Please select another name.')
             return redirect(url_for('home'))
-        # Add the new code
-        urls[request.form['code']] = {'url': request.form['url']}
+        # URL or file?
+        if 'url' in request.form.keys():
+            urls[request.form['code']] = {'url': request.form['url']}
+        else:
+            f = request.files['file']
+            full_name = request.form['code'] + secure_filename(f.filename)
+            f.save('/work/bfilippo/learning_flask/flask_essential_training_linkedin/url_shortener/' + full_name)
+            urls[request.form['code']] = {'file': full_name}
         # Save the urls to a JSON file
         with open('urls.json', 'w') as url_file:
             json.dump(urls, url_file)
